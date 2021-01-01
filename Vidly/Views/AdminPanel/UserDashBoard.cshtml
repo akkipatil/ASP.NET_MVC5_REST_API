@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "UserDashBoard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model Vidly.Models.AdminPanelViewModel
+
+<h2>
+    Welcome @Session["AdminUserName"].ToString()
+</h2>
+
+<div style="text-align: right; width: 100%;">
+    @Html.ActionLink("Logout", "LogOutAdmin", "AdminPanel", new { @class = "btn btn-danger" })
+    @Html.ActionLink("View Operation Logs", "LogView", "AdminPanel", new { @class = "btn btn-info" })
+</div>
+
+@Html.ActionLink("Get all users", "GetAllUsersFroAdmin", "AdminPanel", new { @class = "btn btn-primary" })
+@Html.ActionLink("Add New users", "OpenNewUserFroAdmin", "AdminPanel", new { @class = "btn btn-primary" })
+
+@if (null != Model && null != Model.UserListForAdmin && null != Model.UserListForAdmin.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(m => m.UserListForAdmin[0].First_Name)</th>
+                <th>@Html.DisplayNameFor(m => m.UserListForAdmin[0].Last_Name)</th>
+                <th>@Html.DisplayNameFor(m => m.UserListForAdmin[0].Email_Address)</th>
+                <th>@Html.DisplayNameFor(m => m.UserListForAdmin[0].StatusId)</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+            @foreach (var User in Model.UserListForAdmin)
+            {
+                <tr>
+                    <td>@User.First_Name</td>
+                    <td>@User.Last_Name</td>
+                    <td>@User.Email_Address</td>
+                    @*<td>@User.Status</td>*@
+                <td>
+                    @Html.DropDownList("UserId", Model.GetDropDownItms(@User.StatusId), "", new { @disabled = "disabled",  @class = "form - control" })
+                </td>
+
+                    <td>@Html.ActionLink("Edit", "EditUser", "AdminPanel", new { id = User.UserId }, null)</td>
+                    <td>@Html.ActionLink("Delete", "DeleteUser", "AdminPanel", new { id = User.UserId }, null)</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}

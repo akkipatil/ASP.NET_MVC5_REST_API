@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "LogView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model Vidly.Models.AdminPanelViewModel
+
+<div style="text-align: right; width: 100%;">
+    @Html.ActionLink("Back", "GetAllUsersFroAdmin", "AdminPanel", new { @class = "btn btn-info" })
+    @Html.ActionLink("Logout", "LogOutAdmin", "AdminPanel", new { @class = "btn btn-danger" })
+</div>
+<h2>Activity Table : Latest 200 Records Displayed</h2>
+
+    <table class="table table-bordered" >
+        <thead>
+            <tr>
+                <th>TimeStamp</th>
+                <th>Level</th>
+                <th>Logger</th>
+                <th>Message</th>
+                <th>Exception</th>
+                <th>Stacktrace</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@for( int l_nItr = 0; l_nItr < 100; l_nItr++)*@
+            @foreach (var l_cOpLog in Model.OperationLogs)
+            {
+            <tr>
+                <td>@l_cOpLog.timestamp</td>
+                <td>@l_cOpLog.level</td>
+                <td>@l_cOpLog.logger</td>
+                <td>@l_cOpLog.message</td>
+                <td>@l_cOpLog.exception</td>
+                <td>@l_cOpLog.stacktrace</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

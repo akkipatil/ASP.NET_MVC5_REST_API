@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "NewUserForm";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="text-align: right; width: 100%;">
+    @Html.ActionLink("Back", "GetAllUsersFroAdmin", "AdminPanel", new { @class = "btn btn-info" })
+    @Html.ActionLink("Logout", "LogOutAdmin", "AdminPanel", new { @class = "btn btn-danger" })
+</div>
+
+@model Vidly.Models.AdminPanelViewModel
+
+@if (null != Model && null != Model.SelectedUser && 0 != Model.SelectedUser.UserId)
+{
+    <h2>Update User Form</h2>
+}
+else
+{
+    <h2>New User Form</h2>
+}
+
+@using (Html.BeginForm("AddNewUser", "AdminPanel"))
+{
+    @Html.ValidationSummary(true, "Please fix the following errors.")
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedUser.First_Name)
+        @Html.TextBoxFor(m => m.SelectedUser.First_Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.SelectedUser.First_Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedUser.Last_Name)
+        @Html.TextBoxFor(m => m.SelectedUser.Last_Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.SelectedUser.Last_Name)
+    </div> <div class="form-group">
+        @Html.LabelFor(m => m.SelectedUser.Email_Address)
+        @Html.TextBoxFor(m => m.SelectedUser.Email_Address, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.SelectedUser.Email_Address)
+    </div> <div class="form-group">
+        @Html.LabelFor(m => m.SelectedUser.Password)
+        @Html.PasswordFor(m => m.SelectedUser.Password, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.SelectedUser.Password)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelectedUser.StatusId)<br>
+        @if (null != Model && null != Model.SelectedUser && 0 != Model.SelectedUser.StatusId)
+        {
+            @Html.DropDownList("SelectedUser.StatusId", Model.GetDropDownItms(Model.SelectedUser.StatusId), "", new { @class = "form-control" })
+        }
+        else
+        {
+            @Html.DropDownList("SelectedUser.StatusId", new List<SelectListItem>
+                         {
+                            new SelectListItem{ Text="Active", Value = "1", Selected = true },
+                            new SelectListItem{ Text="Inactive", Value = "2" },
+                            new SelectListItem{ Text="Locked", Value = "3" },
+                            new SelectListItem{ Text="Unlocked", Value = "4" }
+                         }, "", new { @class = "form-control" });
+        }
+        @Html.ValidationMessageFor(m => m.SelectedUser.StatusId)
+    </div>
+
+    @Html.HiddenFor(m => m.SelectedUser.UserId)
+    @Html.AntiForgeryToken()
+
+
+    if (null != Model && null != Model.SelectedUser && 0 != Model.SelectedUser.UserId)
+    {
+        <button type="submit" class="btn btn-primary">Update User</button>
+    }
+    else
+    {
+        <button type="submit" class="btn btn-primary">Add User</button>
+    }
+}
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
